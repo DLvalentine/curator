@@ -19,12 +19,17 @@ namespace CuratorConsole
             // TODO -> token should be permanent, but easy to regen if needed. Might want to document we used Reddit.NET's built in retriever to get it
             var reddit = new RedditClient(appId: "appId", appSecret: "appSecret", refreshToken: "refreshToken");
 
-            // Set sub, get first "hot" post
-            var museumSub = reddit.Subreddit("Museum");
-            var hotMuseumFirstPost = museumSub.Posts.Hot[0];
+            // Randomly select sub and get random "hot" post from the first 10
+            Random rnd = new Random();
+            int artOrMuseumSubChoice = rnd.Next(0, 1);
+
+            var sub = artOrMuseumSubChoice == 0 ? reddit.Subreddit("Art") : reddit.Subreddit("Museum");
+
+            int postChoice = rnd.Next(0, 10);
+            var post = sub.Posts.Hot[postChoice];
 
             // Get the properties we care about - title + image url
-            string postURL = hotMuseumFirstPost.Listing.URL;
+            string postURL = post.Listing.URL;
 
             // Save to appdata
             // NOTE/TODO -> Probably requires admin privileges...might need to document this or add to manifest so users get prompted
