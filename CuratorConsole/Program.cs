@@ -21,11 +21,24 @@ namespace CuratorConsole
 
             // Randomly select sub and get random "hot" post from the first 10
             Random rnd = new Random();
-            int artOrMuseumSubChoice = rnd.Next(0, 1);
+            int subChoice = rnd.Next(0, 2);
 
-            var sub = artOrMuseumSubChoice == 0 ? reddit.Subreddit("Art") : reddit.Subreddit("Museum");
+            var sub = reddit.Subreddit();
 
-            int postChoice = rnd.Next(0, 10);
+            switch(subChoice)
+            {
+                case 0:
+                    sub = reddit.Subreddit("Museum");
+                    break;
+                case 1:
+                    sub = reddit.Subreddit("ArtPorn");
+                    break;
+                case 2:
+                    sub = reddit.Subreddit("ClassicArt");
+                    break;
+            }
+
+            int postChoice = rnd.Next(0, 15);
             var post = sub.Posts.Hot[postChoice];
 
             // Get the properties we care about - title + image url
