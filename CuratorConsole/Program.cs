@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using Reddit;
@@ -43,6 +45,7 @@ namespace CuratorConsole
 
             // Get the properties we care about - title + image url
             string postURL = post.Listing.URL;
+            string postTitle = post.Listing.Title;
 
             // Save to appdata
             // NOTE/TODO -> Probably requires admin privileges...might need to document this or add to manifest so users get prompted
@@ -50,6 +53,22 @@ namespace CuratorConsole
             var webClient = new WebClient();
             webClient.DownloadFile(postURL, $"{appdata}\\curatorPick.jpg");
             webClient.Dispose();
+
+            FileStream fs = new FileStream($"{appdata}\\curatorPick.jpg", FileMode.Open, FileAccess.Read);
+            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+            fs.Close();
+
+            System.Drawing.Bitmap b = new System.Drawing.Bitmap(image);
+            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(b);
+            System.Drawing.FontFamily family = new System.Drawing.FontFamily("Times New Roman");
+            System.Drawing.Font font = new System.Drawing.Font(family, 40.0f, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline);
+            
+            graphics.DrawString($"{postTitle}", font, System.Drawing.Brushes.White, 0, 0);
+
+            b.Save($"{appdata}\\curatorPick.jpg", image.RawFormat);
+
+            image.Dispose();
+            b.Dispose();
 
             // Set as wallpaper
             SystemParametersInfo(SPI_SETDESKWALLPAPER, 1, $"{appdata}\\curatorPick.jpg", SPIF_UPDATEINIFILE);
