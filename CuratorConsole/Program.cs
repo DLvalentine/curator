@@ -61,8 +61,11 @@ namespace CuratorConsole
             System.Drawing.Bitmap b = new System.Drawing.Bitmap(image);
             System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(b);
             System.Drawing.FontFamily family = new System.Drawing.FontFamily("Times New Roman");
-            System.Drawing.Font font = new System.Drawing.Font(family, 40.0f, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline);
+
+            // TODO -> Need to set font size based on size of image, ideally a percentage.
+            System.Drawing.Font font = new System.Drawing.Font(family, 30.0f, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline);
             
+            // TODO -> Would be nice if I could determine the predominant color in the image and set the color from that to contrast better
             graphics.DrawString($"{postTitle}", font, System.Drawing.Brushes.White, 0, 0);
 
             b.Save($"{appdata}\\curatorPick.jpg", image.RawFormat);
